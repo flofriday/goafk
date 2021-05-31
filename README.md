@@ -1,4 +1,4 @@
 # goafk
-Leave your keyboard with confidence
+Leave your terminal with confidence
 
 Work in progress, currently not functional.
