@@ -1,7 +1,10 @@
 from datetime import datetime
+
+from sqlalchemy.sql.schema import UniqueConstraint
 from app.models import Job, User
 import sqlalchemy
 import databases
+from secrets import token_urlsafe
 
 # SQLAlchemy specific code, as with any other app
 DATABASE_URL = "sqlite:///./test.db"
@@ -19,14 +22,15 @@ users = sqlalchemy.Table(
     sqlalchemy.Column("user_name", sqlalchemy.String),
     sqlalchemy.Column("token", sqlalchemy.String),
     sqlalchemy.Column("created_at", sqlalchemy.DateTime),
+    UniqueConstraint("platform", "user_name"),
+    UniqueConstraint("token"),
 )
 
-# TODO: jobs need a token or randomized ids, because we cannot have make them
-# publicly accessable by incremental ids (automated crawlers)
 jobs = sqlalchemy.Table(
     "jobs",
     metadata,
     sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True),
+    sqlalchemy.Column("uuid", sqlalchemy.String),
     sqlalchemy.Column("command", sqlalchemy.String),
     sqlalchemy.Column("exit_code", sqlalchemy.Integer),
     sqlalchemy.Column("os", sqlalchemy.String),
@@ -34,6 +38,7 @@ jobs = sqlalchemy.Table(
     sqlalchemy.Column("seconds", sqlalchemy.Float),
     sqlalchemy.Column("created_at", sqlalchemy.DateTime),
     sqlalchemy.Column("user_id", sqlalchemy.ForeignKey("users.id")),
+    UniqueConstraint("uuid"),
 )
 
 engine = sqlalchemy.create_engine(
@@ -44,6 +49,7 @@ metadata.create_all(engine)
 
 async def insert_job(job: Job) -> int:
     query = jobs.insert().values(
+        uuid=token_urlsafe(16),
         command=job.command,
         exit_code=job.exit_code,
         os=job.os,
@@ -55,8 +61,8 @@ async def insert_job(job: Job) -> int:
     return await database.execute(query)
 
 
-async def select_job_by_id(id: int) -> Job:
-    query = jobs.select().where(jobs.c.id == id)
+async def select_job_by_uuid(uuid: str) -> Job:
+    query = jobs.select().where(jobs.c.uuid == uuid)
     return await database.fetch_one(query)
 
 

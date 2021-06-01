@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimal-ui"
+    />
+    <title>Page Title</title>
+    <meta name="twitter:card" content="summary_large_image" />
+    <!--TODO: also add if success here-->
+    <meta name="twitter:description" content="{{job.command}}" />
+    <meta name="og:description" content="{{job.command}}" />
+    <meta name="twitter:title" content="goafk" />
+    <meta name="og:title" content="goafk" />
+    <meta name="twitter:image" content="{{job.uuid}}.png" />
+    <meta name="og:image" content="{{job.uuid}}.png" />
+
+    <!-- Google Fonts -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"
+    />
+
+    <!-- CSS Reset -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+    />
+
+    <!-- Milligram CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css"
+    />
+  </head>
+  <body>
+    <style>
+      .img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 32px;
+        margin-top: 32px;
+        width: 100%;
+        max-width: 600px;
+        border: 2px solid #434c5e;
+        border-radius: 16px;
+      }
+    </style>
+
+    <div class="container">
+      <img src="{{job.uuid}}.png" class="img" />
+      <h2>Details</h2>
+      <ul>
+        <li>Command: {{job.command}}</li>
+        <li>Exit Code: {{job.exit_code}}</li>
+        <li>OS: {{job.os}}</li>
+        <li>User and Host: {{job.prompt}}</li>
+        <li>Duration: {{job.seconds}}s</li>
+        <li>Completed: {{job.created_at}}</li>
+      </ul>
+      <!--TODO: add last 5 lines of output-->
+      <h2>Last 5 lines output:</h2>
+      <pre><code>
+==> Pouring imagemagick--7.0.11-14.big_sur.bottle.tar.gz
+🍺  /usr/local/Cellar/imagemagick/7.0.11-14: 798 files, 30.3MB
+Removing: /usr/local/Cellar/imagemagick/7.0.11-13_2... (798 files, 30.3MB)
+Removing: /Users/flo/Library/Caches/Homebrew/imagemagick--7.0.11-13_1... (10.2MB)
+Removing: /Users/flo/Library/Caches/Homebrew/imagemagick--7.0.11-13... (10.2MB)
+Removing: /Users/flo/Library/Caches/Homebrew/imagemagick--7.0.11-13_2... (10.2MB)
+</code></pre>
+    </div>
+  </body>
+</html>

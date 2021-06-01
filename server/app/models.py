@@ -27,6 +27,7 @@ class JobIn(BaseModel):
 
 class Job(BaseModel):
     id: int
+    uuid: str
     command: str
     exit_code: int
     os: str
