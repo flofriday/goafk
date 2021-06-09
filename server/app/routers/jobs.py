@@ -1,7 +1,6 @@
 from app.config import get_settings
 from app.render.job import render_job
 import io
-import time
 from fastapi.params import Depends
 from starlette.responses import HTMLResponse, StreamingResponse
 from ..database import insert_job, select_job_by_uuid, select_user_by_token

@@ -15,6 +15,8 @@ success_color = "#88c0d0"
 failure_color = "#d08770"
 
 
+# TODO: add error handling if a funny user uses a exotic OS or messes wiht the
+# service.
 @lru_cache()
 def load_os_logo(os: str) -> Image:
     os_logo = Image.open(f"images/os/{os}.png")  # TODO os agnostic
