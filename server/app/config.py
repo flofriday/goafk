@@ -4,6 +4,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     app_name: str = "goafk"
+    domain_name: str = ""
     telegram_bot_token: str = ""
 
     class Config:

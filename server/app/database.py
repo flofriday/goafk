@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy.sql.schema import UniqueConstraint
-from app.models import Job, User
+from app.models import Job, JobIn, User
 import sqlalchemy
 import databases
 from secrets import token_urlsafe
@@ -47,18 +47,26 @@ engine = sqlalchemy.create_engine(
 metadata.create_all(engine)
 
 
-async def insert_job(job: Job) -> int:
+async def insert_job(job: JobIn) -> Job:
+    job_uuid = token_urlsafe(16)
+    job_created_at = datetime.now()
+
     query = jobs.insert().values(
-        uuid=token_urlsafe(16),
+        uuid=job_uuid,
         command=job.command,
         exit_code=job.exit_code,
         os=job.os,
         prompt=job.prompt,
         seconds=job.seconds,
         user_id=job.user_id,
-        created_at=datetime.now(),
+        created_at=job_created_at,
     )
-    return await database.execute(query)
+
+    id = await database.execute(query)
+    if id is None:
+        return None
+
+    return Job(**job.dict(), id=id, uuid=job_uuid, created_at=job_created_at)
 
 
 async def select_job_by_uuid(uuid: str) -> Job:
